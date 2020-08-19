@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'recipe.g.dart';
 
-
 @JsonSerializable()
 class Result {
   Hits hits;
@@ -17,10 +16,9 @@ class Result {
 @JsonSerializable()
 class Hits {
   Total total;
-  // List<Document> hits;
+  List<Document> hits;
 
-  Hits({this.total, //this.hits
-  });
+  Hits({this.total, this.hits});
 
   factory Hits.fromJson(Map<String, dynamic> json) => _$HitsFromJson(json);
 
@@ -38,50 +36,52 @@ class Total {
   Map<String, dynamic> toJson() => _$TotalToJson(this);
 }
 
-// @JsonSerializable()
-// class Document {
-//   String index;
-//   String id;
-//   // Source source;
+@JsonSerializable()
+class Document {
+  @JsonKey(name: '_index')
+  String index;
+  @JsonKey(name: '_id')
+  String id;
+  @JsonKey(name: '_source')
+  Source source;
 
-//   Document({this.index, this.id, //this.source
-//   });
+  Document(this.index, this.id, this.source);
 
-//   factory Document.fromJson(Map<String, dynamic> json) =>
-//       _$DocumentFromJson(json);
+  factory Document.fromJson(Map<String, dynamic> json) =>
+      _$DocumentFromJson(json);
 
-//   Map<String, dynamic> toJson() => _$DocumentToJson(this);
-// }
+  Map<String, dynamic> toJson() => _$DocumentToJson(this);
+}
 
-// @JsonSerializable()
-// class Source {
-//   List<Recipe> recipes;
+@JsonSerializable()
+class Source {
+  List<Recipe> recipes;
 
-//   Source(this.recipes);
+  Source(this.recipes);
 
-//   factory Source.fromJson(Map<String, dynamic> json) => _$SourceFromJson(json);
+  factory Source.fromJson(Map<String, dynamic> json) => _$SourceFromJson(json);
 
-//   Map<String, dynamic> toJson() => _$SourceToJson(this);
-// }
+  Map<String, dynamic> toJson() => _$SourceToJson(this);
+}
 
-// @JsonSerializable()
-// class Recipe {
-//   String name;
-//   List<String> ingredients;
-//   String preparation;
-//   int persons;
-//   int time;
-//   String tip;
+@JsonSerializable()
+class Recipe {
+  String name;
+  List<String> ingredients;
+  String preparation;
+  int persons;
+  int time;
+  String tip;
 
-//   Recipe(
-//       {this.name,
-//       this.ingredients,
-//       this.preparation,
-//       this.persons,
-//       this.time,
-//       this.tip});
+  Recipe(
+      {this.name,
+      this.ingredients,
+      this.preparation,
+      this.persons,
+      this.time,
+      this.tip});
 
-//   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
+  factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
 
-//   Map<String, dynamic> toJson() => _$RecipeToJson(this);
-// }
+  Map<String, dynamic> toJson() => _$RecipeToJson(this);
+}
