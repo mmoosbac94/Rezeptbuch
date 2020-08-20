@@ -7,8 +7,8 @@ class RecipeUseCase {
   RecipeUseCase(this.recipeRepository);
 
 
-  Future<Result> getAllRecipesOfIndex() {
-    return recipeRepository.getAllRecipesOfIndex();
+  Future<Result> getAllRecipesOfIndex() async {
+    return await recipeRepository.getAllRecipesOfIndex();
   }
 
 }

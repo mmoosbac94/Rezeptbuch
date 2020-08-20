@@ -9,8 +9,8 @@ class RecipeRepository extends AbstractRecipeRepository {
   RecipeRepository(this.webservice);
 
   @override
-  Future<Result> getAllRecipesOfIndex() {
-    return webservice.request();
+  Future<Result> getAllRecipesOfIndex() async {
+    return await webservice.request();
   }
 
 

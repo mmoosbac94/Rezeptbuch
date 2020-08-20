@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'recipe.g.dart';
 
+
 @JsonSerializable()
 class Result {
   Hits hits;
