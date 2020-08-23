@@ -11,4 +11,8 @@ class RecipeUseCase {
     return await recipeRepository.getAllRecipesOfIndex();
   }
 
+  Future<Result> getRecipesByQuery(String query) async {
+    return await recipeRepository.getRecipesByQuery(query);
+  }
+
 }

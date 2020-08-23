@@ -42,17 +42,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _isSearching = false;
+  final TextEditingController _searchQueryController = TextEditingController();
+  String searchQuery = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
-      ),
+          title: _isSearching ? _buildSearchField() : Text(widget.title),
+          leading: _isSearching ? _buildBackButton() : Container(),
+          actions: _buildActions()),
       body: Center(
         child: FutureBuilder<Result>(
             future: context.watch<RecipeUseCase>().getAllRecipesOfIndex(),
-            builder:
-                (BuildContext context, AsyncSnapshot<Result> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<Result> snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
                 return RecipeListView(result: snapshot.data);
@@ -64,6 +68,74 @@ class _MyHomePageState extends State<MyHomePage> {
             }),
       ),
     );
+  }
+
+  Widget _buildBackButton() {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        setState(() {
+          _isSearching = false;
+        });
+      },
+    );
+  }
+
+  Widget _buildSearchField() {
+    return TextField(
+      controller: _searchQueryController,
+      autofocus: true,
+      decoration: InputDecoration(
+        hintText: "Search Data...",
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.white30),
+      ),
+      style: TextStyle(color: Colors.white, fontSize: 16.0),
+      onChanged: (query) => updateSearchQuery(query),
+    );
+  }
+
+  List<Widget> _buildActions() {
+    if (_isSearching) {
+      return <Widget>[
+        IconButton(
+          icon: const Icon(Icons.clear),
+          onPressed: () {
+            if (_searchQueryController == null ||
+                _searchQueryController.text.isEmpty) {
+              return;
+            }
+            _clearSearchQuery();
+          },
+        ),
+      ];
+    }
+
+    return <Widget>[
+      IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: _startSearch,
+      ),
+    ];
+  }
+
+  void _startSearch() {
+    setState(() {
+      _isSearching = true;
+    });
+  }
+
+  void _clearSearchQuery() {
+    setState(() {
+      _searchQueryController.clear();
+      updateSearchQuery("");
+    });
+  }
+
+  void updateSearchQuery(String newQuery) {
+    setState(() {
+      searchQuery = newQuery;
+    });
   }
 }
 
