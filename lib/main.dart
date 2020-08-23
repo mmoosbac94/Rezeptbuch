@@ -49,45 +49,59 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            FutureBuilder<Result>(
-                future: context.watch<RecipeUseCase>().getAllRecipesOfIndex(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<Result> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.hasData) {
-                    return ListView.builder(
-                        itemCount: snapshot.data.hits.hits.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, int index) {
-                          return RecipeWidget(document: snapshot.data.hits.hits[index]);
-                        });
-                  } else {
-                    return CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                    );
-                  }
-                })
-          ],
-        ),
+        child: FutureBuilder<Result>(
+            future: context.watch<RecipeUseCase>().getAllRecipesOfIndex(),
+            builder:
+                (BuildContext context, AsyncSnapshot<Result> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData) {
+                return RecipeListView(result: snapshot.data);
+              } else {
+                return CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                );
+              }
+            }),
       ),
     );
   }
 }
 
-class RecipeWidget extends StatelessWidget {
-  final Document document;
+class RecipeListView extends StatelessWidget {
+  final Result result;
 
-  RecipeWidget({this.document});
+  RecipeListView({@required this.result});
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Text(document.source.recipes[0].name),
-      Text(document.source.recipes[0].preparation),
-      Text('TEST')
-    ]);
+    return ListView.builder(
+        itemCount: result.hits.hits.length,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        padding: EdgeInsets.all(30),
+        itemBuilder: (context, index) {
+          return RecipeCard(document: result.hits.hits[index]);
+        });
+  }
+}
+
+class RecipeCard extends StatelessWidget {
+  final Document document;
+
+  RecipeCard({this.document});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 400,
+      child: Card(
+        child: Column(children: [
+          ListTile(
+              title: Text(document.source.recipes[0].name),
+              subtitle: Text(document.source.recipes[0].time.toString())),
+          FlatButton(child: Text('Mehr erfahren...'), onPressed: null)
+        ]),
+      ),
+    );
   }
 }

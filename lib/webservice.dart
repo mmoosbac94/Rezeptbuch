@@ -17,7 +17,6 @@ class Webservice extends AbstractWebservice {
       print("SUCCESS");
       final jsonResponse = json.decode(response.body);
       Result result = Result.fromJson(jsonResponse);
-      print("WHAT: " + result.hits.hits[0].source.recipes[0].name);
       return result;
     } else {
       print("not successfully");
