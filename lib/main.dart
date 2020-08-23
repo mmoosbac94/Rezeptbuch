@@ -53,20 +53,22 @@ class _MyHomePageState extends State<MyHomePage> {
           title: _isSearching ? _buildSearchField() : Text(widget.title),
           leading: _isSearching ? _buildBackButton() : Container(),
           actions: _buildActions()),
-      body: Center(
-        child: FutureBuilder<Result>(
-            future: context.watch<RecipeUseCase>().getAllRecipesOfIndex(),
-            builder: (BuildContext context, AsyncSnapshot<Result> snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                return RecipeListView(result: snapshot.data);
-              } else {
-                return CircularProgressIndicator(
+      body: FutureBuilder<Result>(
+          future: searchQuery.isEmpty
+              ? context.watch<RecipeUseCase>().getAllRecipesOfIndex()
+              : context.watch<RecipeUseCase>().getRecipesByQuery(searchQuery),
+          builder: (BuildContext context, AsyncSnapshot<Result> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              return RecipeListView(result: snapshot.data);
+            } else {
+              return Center(
+                child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                );
-              }
-            }),
-      ),
+                ),
+              );
+            }
+          }),
     );
   }
 
@@ -75,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
         setState(() {
+          searchQuery = "";
           _isSearching = false;
         });
       },
@@ -169,8 +172,10 @@ class RecipeCard extends StatelessWidget {
       child: Card(
         child: Column(children: [
           ListTile(
-              title: Text(document.source.recipes[0].name),
-              subtitle: Text(document.source.recipes[0].time.toString())),
+              title: Text(document.recipe.name),
+              subtitle: Text(document.recipe.time.toString()),
+              trailing: Text(document.recipe.category)
+              ),
           FlatButton(child: Text('Mehr erfahren...'), onPressed: null)
         ]),
       ),

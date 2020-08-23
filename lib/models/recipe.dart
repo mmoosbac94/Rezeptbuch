@@ -44,9 +44,9 @@ class Document {
   @JsonKey(name: '_id')
   String id;
   @JsonKey(name: '_source')
-  Source source;
+  Recipe recipe;
 
-  Document(this.index, this.id, this.source);
+  Document(this.index, this.id, this.recipe);
 
   factory Document.fromJson(Map<String, dynamic> json) =>
       _$DocumentFromJson(json);
@@ -55,19 +55,9 @@ class Document {
 }
 
 @JsonSerializable()
-class Source {
-  List<Recipe> recipes;
-
-  Source(this.recipes);
-
-  factory Source.fromJson(Map<String, dynamic> json) => _$SourceFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SourceToJson(this);
-}
-
-@JsonSerializable()
 class Recipe {
   String name;
+  String category;
   List<String> ingredients;
   String preparation;
   int persons;
@@ -76,6 +66,7 @@ class Recipe {
 
   Recipe(
       {this.name,
+      this.category,
       this.ingredients,
       this.preparation,
       this.persons,

@@ -12,23 +12,37 @@ class Webservice extends AbstractWebservice {
   @override
   Future<Result> request({String query}) async {
     if (query == null) {
-      String url = _buildURL;
+      String url = _buildURLForAllRecipes;
       Response response = await get(url);
       if (response.statusCode == 200) {
-        print("SUCCESS");
+        print('Success');
         final jsonResponse = json.decode(response.body);
         Result result = Result.fromJson(jsonResponse);
         return result;
       } else {
-        print("not successfully");
+        print('not successfully');
       }
       return null;
     } else {
-      return null;
+      String url = _buildURLForQuery(query);
+      Response response = await get(url);
+      if (response.statusCode == 200) {
+        print('Success');
+        final jsonResponse = json.decode(response.body);
+        Result result = Result.fromJson(jsonResponse);
+        return result;
+      } else {
+        print('not successfully');
+      }
     }
+    return null;
   }
 
-  String get _buildURL {
-    return baseURL + '/recipes/_search';
+  String get _buildURLForAllRecipes {
+    return baseURL + '/rezepte/_search';
+  }
+
+  String _buildURLForQuery(query) {
+    return baseURL + '/_search?q=$query';
   }
 }
