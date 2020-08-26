@@ -158,8 +158,21 @@ class RecipeCard extends StatelessWidget {
       child: Card(
         child: Column(children: [
           ListTile(
-              title: Text(document.recipe.name),
-              subtitle: Text(document.recipe.time.toString()),
+              title: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(document.recipe.name),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
+                    child: Text(
+                        'Zubereitungszeit: ${document.recipe.time.toString()} min.'),
+                  ),
+                  Text('${document.recipe.persons} Personen')
+                ],
+              ),
               trailing: Text(document.recipe.category)),
           FlatButton(child: Text('Mehr erfahren...'), onPressed: null)
         ]),
