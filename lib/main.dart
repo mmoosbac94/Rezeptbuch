@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recipeWebApp/appbar_usecase.dart';
 import 'package:recipeWebApp/models/recipe.dart';
 import 'package:recipeWebApp/recipe_repository.dart';
 import 'package:recipeWebApp/recipe_usecase.dart';
@@ -15,8 +16,12 @@ class MyApp extends StatelessWidget {
     final Webservice webservice = Webservice();
     final RecipeRepository recipeRepository = RecipeRepository(webservice);
 
-    return Provider(
-      create: (_) => RecipeUseCase(recipeRepository),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppBarUseCase>(create: (_) => AppBarUseCase()),
+        ChangeNotifierProvider<RecipeUseCase>(
+            create: (_) => RecipeUseCase(recipeRepository))
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -42,64 +47,64 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _isSearching = false;
   final TextEditingController _searchQueryController = TextEditingController();
-  String searchQuery = "";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: _isSearching ? _buildSearchField() : Text(widget.title),
-          leading: _isSearching ? _buildBackButton() : Container(),
-          actions: _buildActions()),
-      body: FutureBuilder<Result>(
-          future: searchQuery.isEmpty
-              ? context.watch<RecipeUseCase>().getAllRecipesOfIndex()
-              : context.watch<RecipeUseCase>().getRecipesByQuery(searchQuery),
-          builder: (BuildContext context, AsyncSnapshot<Result> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
-              return RecipeListView(result: snapshot.data);
-            } else {
-              return Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                ),
-              );
-            }
-          }),
-    );
+    return Consumer2<AppBarUseCase, RecipeUseCase>(
+        builder: (_, appBarUseCase, recipeUseCase, __) {
+      return Scaffold(
+          appBar: AppBar(
+              title: appBarUseCase.state is AppBarUseCaseInitial ||
+                      appBarUseCase.state is AppBarUseCaseDefault
+                  ? Text(widget.title)
+                  : _buildSearchField(),
+              leading: appBarUseCase.state is AppBarUseCaseInitial ||
+                      appBarUseCase.state is AppBarUseCaseDefault
+                  ? Container()
+                  : _buildBackButton(),
+              actions: _buildActions()),
+          body: _createBody(recipeUseCase, appBarUseCase));
+    });
+  }
+
+  Widget _createBody(RecipeUseCase recipeUseCase, AppBarUseCase appBarUseCase) {
+    if (recipeUseCase.state is RecipeUseCaseInitial) {
+      recipeUseCase.showAllRecipesOfIndex();
+    } else if (recipeUseCase.state is RecipeUseCaseLoading) {
+      return Center(child: CircularProgressIndicator());
+    } else if (recipeUseCase.state is RecipeUseCaseSuccess) {
+      return RecipeListView(
+          result: (recipeUseCase.state as RecipeUseCaseSuccess).result);
+    }
+    return Container();
   }
 
   Widget _buildBackButton() {
     return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        setState(() {
-          searchQuery = "";
-          _isSearching = false;
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          context.read<AppBarUseCase>().resetSearching();
+          context.read<RecipeUseCase>().showAllRecipesOfIndex();
         });
-      },
-    );
   }
 
   Widget _buildSearchField() {
     return TextField(
-      controller: _searchQueryController,
-      autofocus: true,
-      decoration: InputDecoration(
-        hintText: "Search Data...",
-        border: InputBorder.none,
-        hintStyle: TextStyle(color: Colors.white30),
-      ),
-      style: TextStyle(color: Colors.white, fontSize: 16.0),
-      onChanged: (query) => updateSearchQuery(query),
-    );
+        controller: _searchQueryController,
+        autofocus: true,
+        decoration: InputDecoration(
+          hintText: "Search Data...",
+          border: InputBorder.none,
+          hintStyle: TextStyle(color: Colors.white30),
+        ),
+        style: TextStyle(color: Colors.white, fontSize: 16.0),
+        onChanged: (query) =>
+            context.read<RecipeUseCase>().showRecipesByQuery(query));
   }
 
   List<Widget> _buildActions() {
-    if (_isSearching) {
+    if (context.read<AppBarUseCase>().state is AppBarUseCaseSearch) {
       return <Widget>[
         IconButton(
           icon: const Icon(Icons.clear),
@@ -108,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 _searchQueryController.text.isEmpty) {
               return;
             }
-            _clearSearchQuery();
+            _searchQueryController.clear();
           },
         ),
       ];
@@ -117,28 +122,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return <Widget>[
       IconButton(
         icon: const Icon(Icons.search),
-        onPressed: _startSearch,
+        onPressed: () => context.read<AppBarUseCase>().startSearching(),
       ),
     ];
-  }
-
-  void _startSearch() {
-    setState(() {
-      _isSearching = true;
-    });
-  }
-
-  void _clearSearchQuery() {
-    setState(() {
-      _searchQueryController.clear();
-      updateSearchQuery("");
-    });
-  }
-
-  void updateSearchQuery(String newQuery) {
-    setState(() {
-      searchQuery = newQuery;
-    });
   }
 }
 
@@ -174,8 +160,7 @@ class RecipeCard extends StatelessWidget {
           ListTile(
               title: Text(document.recipe.name),
               subtitle: Text(document.recipe.time.toString()),
-              trailing: Text(document.recipe.category)
-              ),
+              trailing: Text(document.recipe.category)),
           FlatButton(child: Text('Mehr erfahren...'), onPressed: null)
         ]),
       ),

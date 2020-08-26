@@ -1,18 +1,53 @@
+import 'package:flutter/material.dart';
 import 'package:recipeWebApp/models/recipe.dart';
 import 'package:recipeWebApp/recipe_repository.dart';
 
-class RecipeUseCase {
+abstract class RecipeUseCaseState {
+  RecipeUseCaseState();
+}
+
+class RecipeUseCaseInitial implements RecipeUseCaseState {
+  const RecipeUseCaseInitial();
+}
+
+class RecipeUseCaseLoading implements RecipeUseCaseState {
+  const RecipeUseCaseLoading();
+}
+
+class RecipeUseCaseSuccess implements RecipeUseCaseState {
+  final Result result;
+
+  const RecipeUseCaseSuccess({@required this.result});
+}
+
+class RecipeUseCase extends ChangeNotifier {
+  RecipeUseCaseState _state;
+
   RecipeRepository recipeRepository;
 
   RecipeUseCase(this.recipeRepository);
 
-
-  Future<Result> getAllRecipesOfIndex() async {
-    return await recipeRepository.getAllRecipesOfIndex();
+  RecipeUseCaseState get state {
+    return _state ??= const RecipeUseCaseInitial();
   }
 
-  Future<Result> getRecipesByQuery(String query) async {
-    return await recipeRepository.getRecipesByQuery(query);
+  void _updateState(RecipeUseCaseState state) {
+    if (state == _state) {
+      return;
+    }
+    _state = state;
+    notifyListeners();
   }
 
+  Future<void> showAllRecipesOfIndex() async {
+    _updateState(RecipeUseCaseLoading());
+    Result result = await recipeRepository.getAllRecipesOfIndex();
+    _updateState(RecipeUseCaseSuccess(result: result));
+  }
+
+  Future<void> showRecipesByQuery(String query) async {
+    _updateState(RecipeUseCaseLoading());
+    Result result = await recipeRepository.getRecipesByQuery(query);
+    _updateState(RecipeUseCaseSuccess(result: result));
+  }
 }
