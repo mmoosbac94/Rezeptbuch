@@ -19,9 +19,6 @@ class AppBarUseCaseDefault implements AppBarUseCaseState {
 class AppBarUseCase extends ChangeNotifier {
   AppBarUseCaseState _state;
 
-  // String searchQuery = "";
-  // bool isSearching = false;
-
   AppBarUseCaseState get state {
     return _state ??= const AppBarUseCaseInitial();
   }
@@ -39,13 +36,6 @@ class AppBarUseCase extends ChangeNotifier {
   }
 
   void startSearching() {
-    // isSearching = true;
     _updateState(AppBarUseCaseSearch());
-    // notifyListeners();
   }
-
-  // void updateSearchQuery(String newQuery) {
-  //   searchQuery = newQuery;
-  //   // notifyListeners();
-  // }
 }
