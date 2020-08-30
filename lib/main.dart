@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipeWebApp/appbar_usecase.dart';
@@ -48,6 +50,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _searchQueryController = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 500);
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
           hintStyle: TextStyle(color: Colors.white30),
         ),
         style: TextStyle(color: Colors.white, fontSize: 16.0),
-        onChanged: (query) =>
-            context.read<RecipeUseCase>().showRecipesByQuery(query));
+        onChanged: (query) => _debouncer.run(
+            () => context.read<RecipeUseCase>().showRecipesByQuery(query)));
   }
 
   List<Widget> _buildActions() {
@@ -125,6 +128,21 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () => context.read<AppBarUseCase>().startSearching(),
       ),
     ];
+  }
+}
+
+class Debouncer {
+  final int milliseconds;
+  VoidCallback action;
+  Timer _timer;
+
+  Debouncer({this.milliseconds});
+
+  run(VoidCallback action) {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
   }
 }
 
