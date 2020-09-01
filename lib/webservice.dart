@@ -15,7 +15,7 @@ class Webservice extends AbstractWebservice {
       String url = _buildURLForAllRecipes;
       Response response = await get(url);
       if (response.statusCode == 200) {
-        print('Success');
+        print('Success getting all recipes');
         final jsonResponse = json.decode(response.body);
         Result result = Result.fromJson(jsonResponse);
         return result;
@@ -27,7 +27,7 @@ class Webservice extends AbstractWebservice {
       String url = _buildURLForQuery(query);
       Response response = await get(url);
       if (response.statusCode == 200) {
-        print('Success');
+        print('Success query');
         final jsonResponse = json.decode(response.body);
         Result result = Result.fromJson(jsonResponse);
         return result;
@@ -44,5 +44,19 @@ class Webservice extends AbstractWebservice {
 
   String _buildURLForQuery(query) {
     return baseURL + '/_search?q=$query';
+  }
+
+  @override
+  Future<String> addRecipe({Recipe recipe}) async {
+    String url = baseURL + '/rezepte/rezept?refresh=wait_for';
+    Response response = await post(url,
+        body: jsonEncode(recipe),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        });
+    if (response.statusCode == 201) {
+      return 'Success adding recipe';
+    }
+    return 'Error';
   }
 }

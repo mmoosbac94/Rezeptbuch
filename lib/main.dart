@@ -8,6 +8,8 @@ import 'package:recipeWebApp/recipe_repository.dart';
 import 'package:recipeWebApp/recipe_usecase.dart';
 import 'package:recipeWebApp/webservice.dart';
 
+import 'add_recipe_dialog.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -72,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _createBody(RecipeUseCase recipeUseCase, AppBarUseCase appBarUseCase) {
+    print("STATEINFO: ${recipeUseCase.state}");
     if (recipeUseCase.state is RecipeUseCaseInitial) {
       recipeUseCase.showAllRecipesOfIndex();
     } else if (recipeUseCase.state is RecipeUseCaseLoading) {
@@ -127,6 +130,10 @@ class _MyHomePageState extends State<MyHomePage> {
         icon: const Icon(Icons.search),
         onPressed: () => context.read<AppBarUseCase>().startSearching(),
       ),
+      IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => showDialog(
+              context: context, builder: (context) => AddRecipeDialog())),
     ];
   }
 }
@@ -192,7 +199,14 @@ class RecipeCard extends StatelessWidget {
                 ],
               ),
               trailing: Text(document.recipe.category)),
-          FlatButton(child: Text('Mehr erfahren...'), onPressed: null)
+          ExpansionTile(
+            title: Text('Mehr erfahren...'),
+            children: <Widget>[
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(document.recipe.preparation))
+            ],
+          )
         ]),
       ),
     );

@@ -18,6 +18,11 @@ class RecipeRepository extends AbstractRecipeRepository {
     return await webservice.request(query: query);
   }
 
+  @override
+  Future<String> addRecipe({Recipe recipe}) async {
+    return await webservice.addRecipe(recipe: recipe);
+  }
+
   
 
 
