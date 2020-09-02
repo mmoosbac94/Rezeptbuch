@@ -7,9 +7,6 @@ import 'package:recipeWebApp/usecases/recipe_usecase.dart';
 import '../models/recipe.dart';
 
 class AddRecipeDialog extends StatelessWidget {
-
-  final recipeNameController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -31,6 +28,7 @@ class CustomForm extends StatefulWidget {
 
 class CustomFormState extends State<CustomForm> {
   final _formKey = GlobalKey<FormState>();
+  final recipeNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +38,10 @@ class CustomFormState extends State<CustomForm> {
           width: 500,
           child: Column(children: <Widget>[
             TextFormField(
+              controller: recipeNameController,
               decoration: InputDecoration(labelText: 'Name'),
             ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Kategorie'),
-            ),
+            CategoriesDropDown(),
             TextFormField(decoration: InputDecoration(labelText: 'Zutaten')),
             TextFormField(
                 decoration: InputDecoration(labelText: 'Zubereitung')),
@@ -74,8 +71,8 @@ class CustomFormState extends State<CustomForm> {
 
   _createAndPostRecipe() async {
     Recipe recipe = Recipe(
-        name: 'TestName',
-        category: 'TestCategory',
+        name: recipeNameController.text,
+        category: CategoriesDropDownState._category,
         ingredients: ['Test1', 'Test2', 'Test3'],
         persons: 2,
         preparation: 'TestPreparation',
@@ -84,5 +81,37 @@ class CustomFormState extends State<CustomForm> {
     String response = await context
         .read<RecipeUseCase>()
         .addRecipe(recipe: recipe, context: context);
+  }
+}
+
+class CategoriesDropDown extends StatefulWidget {
+  @override
+  CategoriesDropDownState createState() {
+    return CategoriesDropDownState();
+  }
+}
+
+class CategoriesDropDownState extends State<CategoriesDropDown> {
+  static final List<String> categories = ['Fleisch', 'Suppe'];
+  static String _category = categories[0];
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      items: categories.map((category) {
+        return DropdownMenuItem(
+          value: category,
+          child: Row(children: <Widget>[Text(category)]),
+        );
+      }).toList(),
+      onChanged: (newCategory) {
+        setState(() {
+          _category = newCategory;
+        });
+      },
+      value: _category,
+      decoration:
+          InputDecoration(contentPadding: EdgeInsets.fromLTRB(10, 20, 10, 20)),
+    );
   }
 }
