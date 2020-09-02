@@ -12,7 +12,7 @@ class AddRecipeDialog extends StatelessWidget {
     return AlertDialog(
         content: Column(
       children: <Widget>[
-        Text('Füge ein neues Rezept hinzu...'),
+        const Text('Füge ein neues Rezept hinzu...'),
         CustomForm(),
       ],
     ));
@@ -28,7 +28,7 @@ class CustomForm extends StatefulWidget {
 
 class CustomFormState extends State<CustomForm> {
   final _formKey = GlobalKey<FormState>();
-  final recipeNameController = TextEditingController();
+  final TextEditingController recipeNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,38 +39,40 @@ class CustomFormState extends State<CustomForm> {
           child: Column(children: <Widget>[
             TextFormField(
               controller: recipeNameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
             CategoriesDropDown(),
-            TextFormField(decoration: InputDecoration(labelText: 'Zutaten')),
             TextFormField(
-                decoration: InputDecoration(labelText: 'Zubereitung')),
+                decoration: const InputDecoration(labelText: 'Zutaten')),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Personen'),
+                decoration: const InputDecoration(labelText: 'Zubereitung')),
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Personen'),
               inputFormatters: <TextInputFormatter>[
                 WhitelistingTextInputFormatter.digitsOnly
               ],
             ),
             TextFormField(
-                decoration: InputDecoration(labelText: 'Dauer'),
+                decoration: const InputDecoration(labelText: 'Dauer'),
                 inputFormatters: <TextInputFormatter>[
                   WhitelistingTextInputFormatter.digitsOnly
                 ]),
             TextFormField(
-                decoration: InputDecoration(labelText: 'Tipp (Optional)')),
+                decoration:
+                    const InputDecoration(labelText: 'Tipp (Optional)')),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: RaisedButton(
                 onPressed: _createAndPostRecipe,
-                child: Text('Erstellen'),
+                child: const Text('Erstellen'),
               ),
             )
           ]),
         ));
   }
 
-  _createAndPostRecipe() async {
-    Recipe recipe = Recipe(
+  Future<void> _createAndPostRecipe() async {
+    final Recipe recipe = Recipe(
         name: recipeNameController.text,
         category: CategoriesDropDownState._category,
         ingredients: ['Test1', 'Test2', 'Test3'],
@@ -78,7 +80,10 @@ class CustomFormState extends State<CustomForm> {
         preparation: 'TestPreparation',
         time: 20,
         tip: 'TestTip');
-    String response = await context
+    // final String response = await context
+    //     .read<RecipeUseCase>()
+    //     .addRecipe(recipe: recipe, context: context);
+    await context
         .read<RecipeUseCase>()
         .addRecipe(recipe: recipe, context: context);
   }
@@ -104,14 +109,14 @@ class CategoriesDropDownState extends State<CategoriesDropDown> {
           child: Row(children: <Widget>[Text(category)]),
         );
       }).toList(),
-      onChanged: (newCategory) {
+      onChanged: (String newCategory) {
         setState(() {
           _category = newCategory;
         });
       },
       value: _category,
-      decoration:
-          InputDecoration(contentPadding: EdgeInsets.fromLTRB(10, 20, 10, 20)),
+      decoration: const InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(10, 20, 10, 20)),
     );
   }
 }

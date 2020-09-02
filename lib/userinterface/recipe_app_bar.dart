@@ -16,7 +16,7 @@ class RecipeAppBar extends StatefulWidget implements PreferredSizeWidget {
   _RecipeAppBarState createState() => _RecipeAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(50.0);
+  Size get preferredSize => const Size.fromHeight(50.0);
 }
 
 class _RecipeAppBarState extends State<RecipeAppBar> {
@@ -86,7 +86,7 @@ class _RecipeAppBarState extends State<RecipeAppBar> {
       ),
       IconButton(
           icon: const Icon(Icons.add),
-          onPressed: () => showDialog(
+          onPressed: () => showDialog<dynamic>(
               context: context, builder: (context) => AddRecipeDialog())),
     ];
   }
@@ -99,7 +99,7 @@ class Debouncer {
 
   Debouncer({this.milliseconds});
 
-  run(VoidCallback action) {
+  dynamic run(VoidCallback action) {
     if (_timer != null) {
       _timer.cancel();
     }

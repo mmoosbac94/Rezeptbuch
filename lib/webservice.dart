@@ -12,24 +12,26 @@ class Webservice extends AbstractWebservice {
   @override
   Future<Result> request({String query}) async {
     if (query == null) {
-      String url = _buildURLForAllRecipes;
-      Response response = await get(url);
+      final String url = _buildURLForAllRecipes;
+      final Response response = await get(url);
       if (response.statusCode == 200) {
         print('Success getting all recipes');
-        final jsonResponse = json.decode(response.body);
-        Result result = Result.fromJson(jsonResponse);
+        final dynamic jsonResponse = json.decode(response.body);
+        final Result result =
+            Result.fromJson(jsonResponse as Map<String, dynamic>);
         return result;
       } else {
         print('not successfully');
       }
       return null;
     } else {
-      String url = _buildURLForQuery(query);
-      Response response = await get(url);
+      final String url = _buildURLForQuery(query);
+      final Response response = await get(url);
       if (response.statusCode == 200) {
         print('Success query');
-        final jsonResponse = json.decode(response.body);
-        Result result = Result.fromJson(jsonResponse);
+        final dynamic jsonResponse = json.decode(response.body);
+        final Result result =
+            Result.fromJson(jsonResponse as Map<String, dynamic>);
         return result;
       } else {
         print('not successfully');
@@ -42,14 +44,14 @@ class Webservice extends AbstractWebservice {
     return baseURL + '/rezepte/_search';
   }
 
-  String _buildURLForQuery(query) {
+  String _buildURLForQuery(String query) {
     return baseURL + '/_search?q=$query';
   }
 
   @override
   Future<String> addRecipe({Recipe recipe}) async {
-    String url = baseURL + '/rezepte/rezept?refresh=wait_for';
-    Response response = await post(url,
+    final String url = baseURL + '/rezepte/rezept?refresh=wait_for';
+    final Response response = await post(url,
         body: jsonEncode(recipe),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'

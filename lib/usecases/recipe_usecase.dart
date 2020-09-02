@@ -40,22 +40,22 @@ class RecipeUseCase extends ChangeNotifier {
   }
 
   Future<void> showAllRecipesOfIndex() async {
-    _updateState(RecipeUseCaseLoading());
-    Result result = await recipeRepository.getAllRecipesOfIndex();
+    _updateState(const RecipeUseCaseLoading());
+    final Result result = await recipeRepository.getAllRecipesOfIndex();
     _updateState(RecipeUseCaseSuccess(result: result));
   }
 
   Future<void> showRecipesByQuery(String query) async {
-    _updateState(RecipeUseCaseLoading());
-    Result result = await recipeRepository.getRecipesByQuery(query);
+    _updateState(const RecipeUseCaseLoading());
+    final Result result = await recipeRepository.getRecipesByQuery(query);
     _updateState(RecipeUseCaseSuccess(result: result));
   }
 
   Future<String> addRecipe({Recipe recipe, BuildContext context}) async {
     Navigator.pop(context);
-    _updateState(RecipeUseCaseLoading());
-    String result = await recipeRepository.addRecipe(recipe: recipe);
-    showAllRecipesOfIndex();
+    _updateState(const RecipeUseCaseLoading());
+    final String result = await recipeRepository.addRecipe(recipe: recipe);
+    await showAllRecipesOfIndex();
     return result;
   }
 }

@@ -11,7 +11,7 @@ class RecipePageBody extends StatelessWidget {
       if (recipeUseCase.state is RecipeUseCaseInitial) {
         recipeUseCase.showAllRecipesOfIndex();
       } else if (recipeUseCase.state is RecipeUseCaseLoading) {
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       } else if (recipeUseCase.state is RecipeUseCaseSuccess) {
         return RecipeListView(
             result: (recipeUseCase.state as RecipeUseCaseSuccess).result);

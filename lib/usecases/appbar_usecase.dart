@@ -32,10 +32,10 @@ class AppBarUseCase extends ChangeNotifier {
   }
 
   void resetSearching() {
-    _updateState(AppBarUseCaseDefault());
+    _updateState(const AppBarUseCaseDefault());
   }
 
   void startSearching() {
-    _updateState(AppBarUseCaseSearch());
+    _updateState(const AppBarUseCaseSearch());
   }
 }

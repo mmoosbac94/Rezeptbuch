@@ -4,7 +4,7 @@ import 'package:recipeWebApp/models/recipe.dart';
 class RecipeListView extends StatelessWidget {
   final Result result;
 
-  RecipeListView({@required this.result});
+  const RecipeListView({@required this.result});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class RecipeListView extends StatelessWidget {
         itemCount: result.hits.hits.length,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        padding: EdgeInsets.all(30),
+        padding: const EdgeInsets.all(30),
         itemBuilder: (context, index) {
           return RecipeCard(document: result.hits.hits[index]);
         });
@@ -22,7 +22,7 @@ class RecipeListView extends StatelessWidget {
 class RecipeCard extends StatelessWidget {
   final Document document;
 
-  RecipeCard({this.document});
+  const RecipeCard({this.document});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class RecipeCard extends StatelessWidget {
               ),
               trailing: Text(document.recipe.category)),
           Padding(
-            padding: EdgeInsets.only(top: 15),
+            padding: const EdgeInsets.only(top: 15),
             child: Theme(
               data: Theme.of(context).copyWith(accentColor: Colors.orange),
               child: ExpansionTile(

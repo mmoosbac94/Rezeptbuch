@@ -1,0 +1,25 @@
+include: package:extra_pedantic/analysis_options_flutter.yaml
+
+analyzer:
+  exclude:
+    - lib/generated/*
+    - lib/**/*.g.dart
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+  errors:
+    missing_return: error
+    missing_required_param: error
+    invalid_use_of_protected_member: error
+
+linter:
+  rules:
+    - unnecessary_statements
+    - unnecessary_lambdas
+    - avoid_classes_with_only_static_members
+    - camel_case_types
+    - constant_identifier_names
+    - cascade_invocations
+    - avoid_bool_literals_in_conditional_expressions
+    - avoid_positional_boolean_parameters
+    - avoid_relative_lib_imports
