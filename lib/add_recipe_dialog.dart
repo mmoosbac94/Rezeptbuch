@@ -7,6 +7,9 @@ import 'package:recipeWebApp/recipe_usecase.dart';
 import 'models/recipe.dart';
 
 class AddRecipeDialog extends StatelessWidget {
+
+  final recipeNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

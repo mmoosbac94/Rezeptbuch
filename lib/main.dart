@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (_, appBarUseCase, recipeUseCase, __) {
       return Scaffold(
           appBar: AppBar(
+              backgroundColor: Colors.orange,
               title: appBarUseCase.state is AppBarUseCaseInitial ||
                       appBarUseCase.state is AppBarUseCaseDefault
                   ? Text(widget.title)
@@ -185,7 +186,8 @@ class RecipeCard extends StatelessWidget {
           ListTile(
               title: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: Text(document.recipe.name),
+                child: Text(document.recipe.name,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,13 +201,26 @@ class RecipeCard extends StatelessWidget {
                 ],
               ),
               trailing: Text(document.recipe.category)),
-          ExpansionTile(
-            title: Text('Mehr erfahren...'),
-            children: <Widget>[
-              Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(document.recipe.preparation))
-            ],
+          Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: Theme(
+              data: Theme.of(context).copyWith(accentColor: Colors.orange),
+              child: ExpansionTile(
+                title: Text(
+                  'Mehr erfahren...',
+                  style: TextStyle(color: Colors.orange),
+                ),
+                children: <Widget>[
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10.0, bottom: 10, left: 20),
+                        child: Text(document.recipe.preparation),
+                      ))
+                ],
+              ),
+            ),
           )
         ]),
       ),
