@@ -29,6 +29,8 @@ class CustomForm extends StatefulWidget {
 class CustomFormState extends State<CustomForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController recipeNameController = TextEditingController();
+  final ValueNotifier<String> dropDownNotifier =
+      ValueNotifier<String>('Fleisch');
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class CustomFormState extends State<CustomForm> {
               controller: recipeNameController,
               decoration: const InputDecoration(labelText: 'Name'),
             ),
-            CategoriesDropDown(),
+            CategoriesDropDown(dropDownNotifier: dropDownNotifier),
             TextFormField(
                 decoration: const InputDecoration(labelText: 'Zutaten')),
             TextFormField(
@@ -74,7 +76,7 @@ class CustomFormState extends State<CustomForm> {
   Future<void> _createAndPostRecipe() async {
     final Recipe recipe = Recipe(
         name: recipeNameController.text,
-        category: CategoriesDropDownState._category,
+        category: dropDownNotifier.value,
         ingredients: ['Test1', 'Test2', 'Test3'],
         persons: 2,
         preparation: 'TestPreparation',
@@ -89,16 +91,12 @@ class CustomFormState extends State<CustomForm> {
   }
 }
 
-class CategoriesDropDown extends StatefulWidget {
-  @override
-  CategoriesDropDownState createState() {
-    return CategoriesDropDownState();
-  }
-}
+class CategoriesDropDown extends StatelessWidget {
+  final ValueNotifier<String> dropDownNotifier;
 
-class CategoriesDropDownState extends State<CategoriesDropDown> {
+  const CategoriesDropDown({@required this.dropDownNotifier});
+
   static final List<String> categories = ['Fleisch', 'Suppe'];
-  static String _category = categories[0];
 
   @override
   Widget build(BuildContext context) {
@@ -110,11 +108,9 @@ class CategoriesDropDownState extends State<CategoriesDropDown> {
         );
       }).toList(),
       onChanged: (String newCategory) {
-        setState(() {
-          _category = newCategory;
-        });
+        dropDownNotifier.value = newCategory;
       },
-      value: _category,
+      value: dropDownNotifier.value,
       decoration: const InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(10, 20, 10, 20)),
     );
