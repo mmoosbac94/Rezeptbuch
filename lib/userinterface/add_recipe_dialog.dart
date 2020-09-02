@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:recipeWebApp/recipe_usecase.dart';
+import 'package:recipeWebApp/usecases/recipe_usecase.dart';
 
-import 'models/recipe.dart';
+import '../models/recipe.dart';
 
 class AddRecipeDialog extends StatelessWidget {
 
