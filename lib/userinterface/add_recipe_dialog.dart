@@ -2,19 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:recipeWebApp/models/recipe.dart';
 import 'package:recipeWebApp/usecases/recipe_usecase.dart';
-
-import '../models/recipe.dart';
 
 class AddRecipeDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        content: Column(
-      children: <Widget>[
-        const Text('Füge ein neues Rezept hinzu...'),
-        CustomForm(),
-      ],
+        content: SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          const Text('Füge ein neues Rezept hinzu...'),
+          CustomForm(),
+        ],
+      ),
     ));
   }
 }
@@ -29,6 +30,9 @@ class CustomForm extends StatefulWidget {
 class CustomFormState extends State<CustomForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController recipeNameController = TextEditingController();
+  final TextEditingController recipePersonController = TextEditingController();
+  final TextEditingController recipeTimeController = TextEditingController();
+  final TextEditingController recipeTipController = TextEditingController();
   final ValueNotifier<String> dropDownNotifier =
       ValueNotifier<String>('Fleisch');
 
@@ -47,14 +51,18 @@ class CustomFormState extends State<CustomForm> {
             TextFormField(
                 decoration: const InputDecoration(labelText: 'Zutaten')),
             TextFormField(
+                maxLines: null,
+                keyboardType: TextInputType.text,
                 decoration: const InputDecoration(labelText: 'Zubereitung')),
             TextFormField(
+              controller: recipePersonController,
               decoration: const InputDecoration(labelText: 'Personen'),
               inputFormatters: <TextInputFormatter>[
                 WhitelistingTextInputFormatter.digitsOnly
               ],
             ),
             TextFormField(
+                controller: recipeTimeController,
                 decoration: const InputDecoration(labelText: 'Dauer'),
                 inputFormatters: <TextInputFormatter>[
                   WhitelistingTextInputFormatter.digitsOnly
@@ -78,10 +86,10 @@ class CustomFormState extends State<CustomForm> {
         name: recipeNameController.text,
         category: dropDownNotifier.value,
         ingredients: ['Test1', 'Test2', 'Test3'],
-        persons: 2,
+        persons: int.parse(recipePersonController.text),
         preparation: 'TestPreparation',
-        time: 20,
-        tip: 'TestTip');
+        time: int.parse(recipeTimeController.text),
+        tip: recipeTipController.text);
     // final String response = await context
     //     .read<RecipeUseCase>()
     //     .addRecipe(recipe: recipe, context: context);
@@ -112,6 +120,7 @@ class CategoriesDropDown extends StatelessWidget {
       },
       value: dropDownNotifier.value,
       decoration: const InputDecoration(
+          labelText: 'Kategorie',
           contentPadding: EdgeInsets.fromLTRB(10, 20, 10, 20)),
     );
   }
