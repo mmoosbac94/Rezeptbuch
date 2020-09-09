@@ -6,7 +6,6 @@ import 'package:recipeWebApp/usecases/appbar_usecase.dart';
 import 'package:recipeWebApp/usecases/recipe_usecase.dart';
 import 'package:recipeWebApp/userinterface/add_recipe_dialog.dart';
 
-
 class RecipeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
 
@@ -50,8 +49,15 @@ class _RecipeAppBarState extends State<RecipeAppBar> {
           hintStyle: TextStyle(color: Colors.white30),
         ),
         style: TextStyle(color: Colors.white, fontSize: 16.0),
-        onChanged: (query) => _debouncer.run(
-            () => context.read<RecipeUseCase>().showRecipesByQuery(query)));
+        onChanged: _checkInput);
+  }
+
+  void _checkInput(String query) {
+    if (query.length > 3) {
+      _debouncer
+          .run(() => context.read<RecipeUseCase>().showRecipesByQuery(query));
+    }
+    Container();
   }
 
   Widget _buildBackButton() {
@@ -87,8 +93,9 @@ class _RecipeAppBarState extends State<RecipeAppBar> {
       IconButton(
           icon: const Icon(Icons.add),
           onPressed: () => showDialog<dynamic>(
-            barrierDismissible: false,
-              context: context, builder: (context) => AddRecipeDialog())),
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => AddRecipeDialog())),
     ];
   }
 }

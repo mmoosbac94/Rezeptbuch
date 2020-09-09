@@ -13,6 +13,13 @@ class RecipePageBody extends StatelessWidget {
       } else if (recipeUseCase.state is RecipeUseCaseLoading) {
         return const Center(child: CircularProgressIndicator());
       } else if (recipeUseCase.state is RecipeUseCaseSuccess) {
+        if ((recipeUseCase.state as RecipeUseCaseSuccess)
+            .result
+            .hits
+            .hits
+            .isEmpty) {
+          return const Text('NOTHING FOUND');
+        }
         return RecipeListView(
             result: (recipeUseCase.state as RecipeUseCaseSuccess).result);
       }
