@@ -18,7 +18,7 @@ class RecipePageBody extends StatelessWidget {
             .hits
             .hits
             .isEmpty) {
-          return const Text('NOTHING FOUND');
+          return const Text('Es wurde nichts gefunden...');
         }
         return RecipeListView(
             result: (recipeUseCase.state as RecipeUseCaseSuccess).result);

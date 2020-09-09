@@ -92,7 +92,7 @@ class CustomFormState extends State<CustomForm> {
     final Recipe recipe = Recipe(
         name: recipeNameController.text,
         category: dropDownNotifier.value,
-        ingredients: ['Test1', 'Test2', 'Test3'],
+        ingredients: context.read<AddRecipeUseCase>().ingredientsList,
         persons: int.parse(recipePersonController.text),
         preparation: recipePreparationController.text,
         time: int.parse(recipeTimeController.text),

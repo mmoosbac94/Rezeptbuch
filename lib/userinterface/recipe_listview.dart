@@ -58,13 +58,17 @@ class RecipeCard extends StatelessWidget {
                   style: TextStyle(color: Colors.orange),
                 ),
                 children: <Widget>[
+                  Column(
+                      children: document.recipe.ingredients
+                          .map((ingredient) => Text(ingredient))
+                          .toList()),
                   Align(
                       alignment: Alignment.topLeft,
                       child: Padding(
                         padding: const EdgeInsets.only(
                             top: 10.0, bottom: 10, left: 20),
                         child: Text(document.recipe.preparation),
-                      ))
+                      )),
                 ],
               ),
             ),
