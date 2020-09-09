@@ -52,16 +52,35 @@ class CustomFormState extends State<CustomForm> {
           width: 500,
           child: Column(children: <Widget>[
             TextFormField(
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Du Depp, ein Rezept brauch schließlich einen Namen';
+                }
+                return null;
+              },
               controller: recipeNameController,
               decoration: const InputDecoration(labelText: 'Name'),
             ),
             CategoriesDropDown(dropDownNotifier: dropDownNotifier),
             IngredientsAdder(controller: ingredientController),
             TextFormField(
+                controller: recipePreparationController,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Bitte eine Zubereitung eingeben';
+                  }
+                  return null;
+                },
                 maxLines: null,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(labelText: 'Zubereitung')),
             TextFormField(
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Bitte die Anzahl der Personen angeben';
+                }
+                return null;
+              },
               controller: recipePersonController,
               decoration: const InputDecoration(labelText: 'Personen'),
               inputFormatters: <TextInputFormatter>[
@@ -69,18 +88,30 @@ class CustomFormState extends State<CustomForm> {
               ],
             ),
             TextFormField(
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Bitte eine Zubereitungszeit angeben';
+                  }
+                  return null;
+                },
                 controller: recipeTimeController,
                 decoration: const InputDecoration(labelText: 'Dauer'),
                 inputFormatters: <TextInputFormatter>[
                   WhitelistingTextInputFormatter.digitsOnly
                 ]),
             TextFormField(
+                controller: recipeTipController,
                 decoration:
                     const InputDecoration(labelText: 'Tipp (Optional)')),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: RaisedButton(
-                onPressed: _createAndPostRecipe,
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    _createAndPostRecipe();
+                    context.read<AddRecipeUseCase>().ingredientsList.clear();
+                  }
+                },
                 child: const Text('Erstellen'),
               ),
             )
@@ -117,6 +148,12 @@ class IngredientsAdder extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
+              validator: (value) {
+                if (context.read<AddRecipeUseCase>().ingredientsList.isEmpty) {
+                  return 'Es fehlt mindestens eine Zutat';
+                }
+                return null;
+              },
               controller: controller,
               decoration: InputDecoration(
                   labelText: 'Zutaten',
