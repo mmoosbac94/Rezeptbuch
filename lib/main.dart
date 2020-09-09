@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recipeWebApp/usecases/add_recipe_usecase.dart';
 import 'package:recipeWebApp/usecases/appbar_usecase.dart';
 import 'package:recipeWebApp/recipe_repository.dart';
 import 'package:recipeWebApp/usecases/recipe_usecase.dart';
 import 'package:recipeWebApp/userinterface/recipe_app_bar.dart';
 import 'package:recipeWebApp/userinterface/recipe_page_body.dart';
 import 'package:recipeWebApp/webservice.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AppBarUseCase>(create: (_) => AppBarUseCase()),
         ChangeNotifierProvider<RecipeUseCase>(
-            create: (_) => RecipeUseCase(recipeRepository))
+            create: (_) => RecipeUseCase(recipeRepository)),
+        ChangeNotifierProvider<AddRecipeUseCase>(
+            create: (_) => AddRecipeUseCase())
       ],
       child: MaterialApp(
         title: 'Flutter Rezeptbuch',

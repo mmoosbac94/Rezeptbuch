@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipeWebApp/usecases/appbar_usecase.dart';
 import 'package:recipeWebApp/usecases/recipe_usecase.dart';
+import 'package:recipeWebApp/userinterface/add_recipe_dialog.dart';
 
-import 'add_recipe_dialog.dart';
 
 class RecipeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -87,6 +87,7 @@ class _RecipeAppBarState extends State<RecipeAppBar> {
       IconButton(
           icon: const Icon(Icons.add),
           onPressed: () => showDialog<dynamic>(
+            barrierDismissible: false,
               context: context, builder: (context) => AddRecipeDialog())),
     ];
   }

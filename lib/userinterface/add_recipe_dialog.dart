@@ -3,20 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:recipeWebApp/models/recipe.dart';
+import 'package:recipeWebApp/usecases/add_recipe_usecase.dart';
 import 'package:recipeWebApp/usecases/recipe_usecase.dart';
 
 class AddRecipeDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        content: SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          const Text('Füge ein neues Rezept hinzu...'),
-          CustomForm(),
+        actions: <Widget>[
+          InkWell(
+              onTap: () => context.read<AddRecipeUseCase>().cancel(context),
+              child: const Text('Cancel'))
         ],
-      ),
-    ));
+        scrollable: true,
+        content: Column(
+          children: <Widget>[
+            const Text('Füge ein neues Rezept hinzu...'),
+            CustomForm(),
+          ],
+        ));
   }
 }
 
@@ -30,8 +35,11 @@ class CustomForm extends StatefulWidget {
 class CustomFormState extends State<CustomForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController recipeNameController = TextEditingController();
+  final TextEditingController ingredientController = TextEditingController();
   final TextEditingController recipePersonController = TextEditingController();
   final TextEditingController recipeTimeController = TextEditingController();
+  final TextEditingController recipePreparationController =
+      TextEditingController();
   final TextEditingController recipeTipController = TextEditingController();
   final ValueNotifier<String> dropDownNotifier =
       ValueNotifier<String>('Fleisch');
@@ -48,8 +56,7 @@ class CustomFormState extends State<CustomForm> {
               decoration: const InputDecoration(labelText: 'Name'),
             ),
             CategoriesDropDown(dropDownNotifier: dropDownNotifier),
-            TextFormField(
-                decoration: const InputDecoration(labelText: 'Zutaten')),
+            IngredientsAdder(controller: ingredientController),
             TextFormField(
                 maxLines: null,
                 keyboardType: TextInputType.text,
@@ -87,7 +94,7 @@ class CustomFormState extends State<CustomForm> {
         category: dropDownNotifier.value,
         ingredients: ['Test1', 'Test2', 'Test3'],
         persons: int.parse(recipePersonController.text),
-        preparation: 'TestPreparation',
+        preparation: recipePreparationController.text,
         time: int.parse(recipeTimeController.text),
         tip: recipeTipController.text);
     // final String response = await context
@@ -96,6 +103,42 @@ class CustomFormState extends State<CustomForm> {
     await context
         .read<RecipeUseCase>()
         .addRecipe(recipe: recipe, context: context);
+  }
+}
+
+class IngredientsAdder extends StatelessWidget {
+  final TextEditingController controller;
+
+  const IngredientsAdder({this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+              controller: controller,
+              decoration: InputDecoration(
+                  labelText: 'Zutaten',
+                  suffixIcon: InkWell(
+                    onTap: () => context
+                        .read<AddRecipeUseCase>()
+                        .addIngredient(controller),
+                    child: const Icon(Icons.add_circle),
+                  ))),
+          Consumer<AddRecipeUseCase>(
+            builder: (_, addRecipeUseCase, __) {
+              if (addRecipeUseCase.ingredientsList.isNotEmpty) {
+                return Row(
+                    children: addRecipeUseCase.ingredientsList
+                        .map((ingredient) => Text(ingredient))
+                        .toList());
+              } else {
+                return Container();
+              }
+            },
+          )
+        ]);
   }
 }
 
