@@ -45,7 +45,7 @@ class Webservice extends AbstractWebservice {
   }
 
   String _buildURLForQuery(String query) {
-    return baseURL + '/_search?q=*$query*';
+    return baseURL + '/rezepte/_search?q=*$query*';
   }
 
   @override

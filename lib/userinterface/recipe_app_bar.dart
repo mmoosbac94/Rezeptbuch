@@ -49,15 +49,8 @@ class _RecipeAppBarState extends State<RecipeAppBar> {
           hintStyle: TextStyle(color: Colors.white30),
         ),
         style: TextStyle(color: Colors.white, fontSize: 16.0),
-        onChanged: _checkInput);
-  }
-
-  void _checkInput(String query) {
-    if (query.length > 3) {
-      _debouncer
-          .run(() => context.read<RecipeUseCase>().showRecipesByQuery(query));
-    }
-    Container();
+        onChanged: (query) => _debouncer
+          .run(() => context.read<RecipeUseCase>().showRecipesByQuery(query)));
   }
 
   Widget _buildBackButton() {
