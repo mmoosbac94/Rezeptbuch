@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:recipeWebApp/models/recipe.dart';
 
 abstract class AbstractWebservice {
-  Future<Result> request({String query});
+  Future<Result> getRecipes({String query});
 
-  Future<String> addRecipe({Recipe recipe});
+  Future<String> addRecipe({@required Recipe recipe});
+
+  Future<String> removeRecipe({@required Document document});
 }

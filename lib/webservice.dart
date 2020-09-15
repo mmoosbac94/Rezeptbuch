@@ -10,7 +10,7 @@ class Webservice extends AbstractWebservice {
   Webservice();
 
   @override
-  Future<Result> request({String query}) async {
+  Future<Result> getRecipes({String query}) async {
     String url;
 
     if (query == null) {
@@ -51,5 +51,16 @@ class Webservice extends AbstractWebservice {
       return 'Success adding recipe';
     }
     return 'Error';
+  }
+
+  @override
+  Future<String> removeRecipe({Document document}) async {
+    final String url =
+        baseURL + '/rezepte/rezept/${document.id}?refresh=wait_for';
+    final Response response = await delete(url);
+    if (response.statusCode == 200) {
+      return 'Recipe was successfully deleted';
+    }
+    return 'Error removing recipe';
   }
 }

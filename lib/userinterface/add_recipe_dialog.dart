@@ -61,7 +61,6 @@ class CustomFormState extends State<CustomForm> {
             CategoriesDropDown(dropDownNotifier: dropDownNotifier),
             IngredientsAdder(controller: ingredientController),
             TextFormField(
-
                 controller: recipePreparationController,
                 validator: (value) {
                   if (value.isEmpty) {
@@ -164,9 +163,18 @@ class IngredientsAdder extends StatelessWidget {
           Consumer<AddRecipeUseCase>(
             builder: (_, addRecipeUseCase, __) {
               if (addRecipeUseCase.ingredientsList.isNotEmpty) {
-                return Row(
+                return Wrap(
                     children: addRecipeUseCase.ingredientsList
-                        .map((ingredient) => Text(ingredient))
+                        .map((ingredient) => Container(
+                            decoration: const BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            margin: const EdgeInsets.all(5),
+                            padding: const EdgeInsets.only(
+                                top: 5, bottom: 5, left: 10, right: 10),
+                            child: Text(ingredient,
+                                style: const TextStyle(color: Colors.white))))
                         .toList());
               } else {
                 return Container();

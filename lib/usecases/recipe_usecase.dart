@@ -58,4 +58,12 @@ class RecipeUseCase extends ChangeNotifier {
     await showAllRecipesOfIndex();
     return result;
   }
+
+  Future<String> removeRecipe({@required Document document}) async {
+    _updateState(const RecipeUseCaseLoading());
+    final String result =
+        await recipeRepository.removeRecipe(document: document);
+    await showAllRecipesOfIndex();
+    return result;
+  }
 }

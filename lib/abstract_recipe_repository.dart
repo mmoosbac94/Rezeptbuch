@@ -7,4 +7,7 @@ abstract class AbstractRecipeRepository {
   Future<Result> getRecipesByQuery(String query);
 
   Future<String> addRecipe({Recipe recipe});
+
+  Future<String> removeRecipe({Document document});
+
 }

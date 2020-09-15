@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:recipeWebApp/models/recipe.dart';
+import 'package:recipeWebApp/usecases/recipe_usecase.dart';
 import 'package:recipeWebApp/userinterface/recipe_view.dart';
+import 'package:provider/provider.dart';
 
 class RecipeGridView extends StatelessWidget {
   final Result result;
@@ -49,7 +51,7 @@ class RecipeCard extends StatelessWidget {
               title: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(document.recipe.name,
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,14 +66,32 @@ class RecipeCard extends StatelessWidget {
               ),
               trailing: Text(document.recipe.category)),
           Padding(
-            padding: const EdgeInsets.only(top: 25, left: 17),
-            child: RaisedButton(
-              onPressed: () => showDialog<dynamic>(
-                  context: context,
-                  builder: (context) => RecipeView(recipe: document.recipe)),
-              child: const Text('Mehr erfahren...'),
+            padding: const EdgeInsets.only(top: 25.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 17),
+                  child: RaisedButton(
+                    onPressed: () => showDialog<dynamic>(
+                        context: context,
+                        builder: (context) =>
+                            RecipeView(recipe: document.recipe)),
+                    child: const Text('Mehr erfahren...'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 18.0),
+                  child: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () => context
+                          .read<RecipeUseCase>()
+                          .removeRecipe(document: document),
+                      hoverColor: Colors.transparent),
+                )
+              ],
             ),
-          ),
+          )
         ],
       ),
     );
