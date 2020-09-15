@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipeWebApp/usecases/recipe_usecase.dart';
-import 'package:recipeWebApp/userinterface/recipe_listview.dart';
+import 'package:recipeWebApp/userinterface/recipe_gridview.dart';
 
 class RecipePageBody extends StatelessWidget {
   @override
@@ -20,7 +20,7 @@ class RecipePageBody extends StatelessWidget {
             .isEmpty) {
           return const Text('Es wurde nichts gefunden...');
         }
-        return RecipeListView(
+        return RecipeGridView(
             result: (recipeUseCase.state as RecipeUseCaseSuccess).result);
       }
       return Container();

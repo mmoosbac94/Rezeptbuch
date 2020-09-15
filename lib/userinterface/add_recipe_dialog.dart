@@ -10,18 +10,15 @@ class AddRecipeDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        actions: <Widget>[
-          InkWell(
-              onTap: () => context.read<AddRecipeUseCase>().cancel(context),
-              child: const Text('Cancel'))
-        ],
-        scrollable: true,
-        content: Column(
-          children: <Widget>[
-            const Text('Füge ein neues Rezept hinzu...'),
-            CustomForm(),
-          ],
-        ));
+      title: const Text('Füge ein neues Rezept hinzu...'),
+      actions: <Widget>[
+        InkWell(
+            onTap: () => context.read<AddRecipeUseCase>().cancel(context),
+            child: const Text('Cancel'))
+      ],
+      scrollable: true,
+      content: CustomForm(),
+    );
   }
 }
 
@@ -64,6 +61,7 @@ class CustomFormState extends State<CustomForm> {
             CategoriesDropDown(dropDownNotifier: dropDownNotifier),
             IngredientsAdder(controller: ingredientController),
             TextFormField(
+
                 controller: recipePreparationController,
                 validator: (value) {
                   if (value.isEmpty) {
@@ -72,7 +70,7 @@ class CustomFormState extends State<CustomForm> {
                   return null;
                 },
                 maxLines: null,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(labelText: 'Zubereitung')),
             TextFormField(
               validator: (value) {

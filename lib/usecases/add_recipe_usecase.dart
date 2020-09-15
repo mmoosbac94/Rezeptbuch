@@ -4,7 +4,7 @@ class AddRecipeUseCase extends ChangeNotifier {
   List<String> ingredientsList = [];
 
   void addIngredient(TextEditingController controller) {
-    ingredientsList.add(controller.text);
+    if (controller.text.isNotEmpty) ingredientsList.add(controller.text);
     controller.clear();
     notifyListeners();
   }

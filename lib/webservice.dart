@@ -11,31 +11,22 @@ class Webservice extends AbstractWebservice {
 
   @override
   Future<Result> request({String query}) async {
+    String url;
+
     if (query == null) {
-      final String url = _buildURLForAllRecipes;
-      final Response response = await get(url);
-      if (response.statusCode == 200) {
-        print('Success getting all recipes');
-        final dynamic jsonResponse = json.decode(response.body);
-        final Result result =
-            Result.fromJson(jsonResponse as Map<String, dynamic>);
-        return result;
-      } else {
-        print('not successfully');
-      }
-      return null;
+      url = _buildURLForAllRecipes;
     } else {
-      final String url = _buildURLForQuery(query);
-      final Response response = await get(url);
-      if (response.statusCode == 200) {
-        print('Success query');
-        final dynamic jsonResponse = json.decode(response.body);
-        final Result result =
-            Result.fromJson(jsonResponse as Map<String, dynamic>);
-        return result;
-      } else {
-        print('not successfully');
-      }
+      url = _buildURLForQuery(query);
+    }
+    final Response response = await get(url);
+    if (response.statusCode == 200) {
+      print('Success query');
+      final dynamic jsonResponse = json.decode(response.body);
+      final Result result =
+          Result.fromJson(jsonResponse as Map<String, dynamic>);
+      return result;
+    } else {
+      print('not successfully');
     }
     return null;
   }
