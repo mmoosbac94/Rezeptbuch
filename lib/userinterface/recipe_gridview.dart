@@ -12,16 +12,25 @@ class RecipeGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
 
     return GridView.count(
         shrinkWrap: true,
-        childAspectRatio: MediaQuery.of(context).size.height * 0.003,
+        childAspectRatio: _checkHeight(height, width),
         crossAxisCount: _checkCount(width),
         crossAxisSpacing: 20.0,
         mainAxisSpacing: 20.0,
         padding: const EdgeInsets.all(20.0),
         children: List.generate(result.hits.hits.length,
             (index) => RecipeCard(document: result.hits.hits[index])));
+  }
+}
+
+double _checkHeight(double height, double width) {
+  if (width < 370) {
+    return height * 0.002;
+  } else {
+    return height * 0.003;
   }
 }
 

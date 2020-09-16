@@ -25,14 +25,13 @@ class RecipeView extends StatelessWidget {
 
   Widget _buildRecipeContent() {
     return Container(
-      width: 500,
-      child: Column(children: <Widget>[
-        _createIngredientsPart(),
-        _divider(),
-        _createPreparationPart(),
-        Text(recipe.tip)
-      ]),
-    );
+        width: 500,
+        child: Column(children: <Widget>[
+          _createIngredientsPart(),
+          _divider(),
+          _createPreparationPart(),
+          _createTipPart()
+        ]));
   }
 
   Widget _createIngredientsPart() {
@@ -66,6 +65,22 @@ class RecipeView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _createTipPart() {
+    return recipe.tip.isNotEmpty
+        ? Padding(
+          padding: const EdgeInsets.only(top: 30.0),
+          child: RichText(
+              text: TextSpan(children: [
+                const TextSpan(
+                    text: 'Tipp: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: recipe.tip)
+              ], style: TextStyle(color: Colors.black)),
+            ),
+        )
+        : Container();
   }
 
   Widget _divider() {

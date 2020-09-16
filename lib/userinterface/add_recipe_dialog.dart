@@ -190,7 +190,16 @@ class CategoriesDropDown extends StatelessWidget {
 
   const CategoriesDropDown({@required this.dropDownNotifier});
 
-  static final List<String> categories = ['Fleisch', 'Suppe'];
+  static final List<String> categories = [
+    'Fleisch',
+    'Fisch',
+    'Pasta',
+    'Vegetarisch',
+    'Suppe',
+    'Dessert',
+    'Sauce',
+    'Snack'
+  ];
 
   @override
   Widget build(BuildContext context) {
