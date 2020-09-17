@@ -5,7 +5,7 @@ import 'package:recipeWebApp/abstract_webservice.dart';
 import 'package:recipeWebApp/models/recipe.dart';
 
 class Webservice extends AbstractWebservice {
-  String baseURL = 'http://localhost:9200';
+  String baseURL = 'https://elasticsearch.cr0wd.net';
 
   Webservice();
 
