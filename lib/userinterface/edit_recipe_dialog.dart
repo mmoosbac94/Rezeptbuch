@@ -11,7 +11,7 @@ class EditRecipeDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Rezept bearbeiten'),
-      content: CustomRecipeForm(document: document),
+      content: CustomRecipeForm.edit(document: document),
       scrollable: true,
     );
   }

@@ -10,6 +10,7 @@ class RecipeGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("ANIMUS:" + result.hits.hits.length.toString());
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
 
@@ -94,9 +95,10 @@ class RecipeCard extends StatelessWidget {
                       icon: const Icon(Icons.edit),
                       onPressed: () => showDialog<dynamic>(
                           context: context,
-                          builder: (context) => EditRecipeDialog(document: document)),
+                          builder: (context) =>
+                              EditRecipeDialog(document: document)),
                       hoverColor: Colors.transparent,
-                    ))
+                    )),
               ],
             ),
           )

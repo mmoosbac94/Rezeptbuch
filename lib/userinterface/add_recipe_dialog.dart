@@ -15,7 +15,7 @@ class AddRecipeDialog extends StatelessWidget {
             child: const Text('Cancel'))
       ],
       scrollable: true,
-      content: const CustomRecipeForm(),
+      content: CustomRecipeForm.create()
     );
   }
 }

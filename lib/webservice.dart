@@ -33,11 +33,11 @@ class Webservice extends AbstractWebservice {
   }
 
   String get _buildURLForAllRecipes {
-    return baseURL + '/rezepte/_search';
+    return baseURL + '/rezepte/_search?size=1000';
   }
 
   String _buildURLForQuery(String query) {
-    return baseURL + '/rezepte/_search?q=*$query*';
+    return baseURL + '/rezepte/_search?q=*$query*?size=1000';
   }
 
   @override

@@ -6,12 +6,19 @@ import 'package:recipeWebApp/models/recipe.dart';
 import 'package:recipeWebApp/usecases/ingredient_usecase.dart';
 import 'package:recipeWebApp/usecases/recipe_usecase.dart';
 import 'package:provider/provider.dart';
+import 'package:recipeWebApp/userinterface/delete_dialog.dart';
 import 'package:recipeWebApp/userinterface/ingredients_adder.dart';
 
+// ignore: must_be_immutable
 class CustomRecipeForm extends StatefulWidget {
-  final Document document;
+  Document document;
+  bool isEditMode = false;
 
-  const CustomRecipeForm({this.document});
+  CustomRecipeForm.create();
+
+  CustomRecipeForm.edit({@required this.document}) {
+    isEditMode = true;
+  }
 
   @override
   CustomFormState createState() {
@@ -33,7 +40,7 @@ class CustomFormState extends State<CustomRecipeForm> {
 
   @override
   void initState() {
-    if (widget.document != null) {
+    if (widget.isEditMode) {
       recipeNameController.text = widget.document.recipe.name;
       Provider.of<IngredientUseCase>(context, listen: false)
           .ingredientsList
@@ -119,11 +126,18 @@ class CustomFormState extends State<CustomRecipeForm> {
                     context.read<IngredientUseCase>().ingredientsList.clear();
                   }
                 },
-                child: (widget.document == null)
+                child: (!widget.isEditMode)
                     ? const Text('Erstellen')
                     : const Text('Ändern'),
               ),
-            )
+            ),
+            if (widget.document != null)
+              IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => showDialog<dynamic>(
+                      context: context,
+                      builder: (context) =>
+                          DeleteDialog(document: widget.document)))
           ]),
         ));
   }
@@ -137,7 +151,7 @@ class CustomFormState extends State<CustomRecipeForm> {
         preparation: recipePreparationController.text,
         time: int.parse(recipeTimeController.text),
         tip: recipeTipController.text);
-    if (widget.document == null) {
+    if (!widget.isEditMode) {
       await context
           .read<RecipeUseCase>()
           .addRecipe(recipe: recipe, context: context);
