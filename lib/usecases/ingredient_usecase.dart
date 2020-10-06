@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-class AddRecipeUseCase extends ChangeNotifier {
-  List<String> ingredientsList = [];
+class IngredientUseCase extends ChangeNotifier {
+  List<String> ingredientsList = <String>[];
 
   void addIngredient(TextEditingController controller) {
     if (controller.text.isNotEmpty) ingredientsList.add(controller.text);
@@ -10,7 +10,6 @@ class AddRecipeUseCase extends ChangeNotifier {
   }
 
   void cancel(BuildContext context) {
-    ingredientsList = [];
     Navigator.pop(context);
   }
 }

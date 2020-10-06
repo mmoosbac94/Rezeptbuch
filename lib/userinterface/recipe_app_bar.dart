@@ -43,14 +43,14 @@ class _RecipeAppBarState extends State<RecipeAppBar> {
     return TextField(
         controller: _searchQueryController,
         autofocus: true,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: "Search Data...",
           border: InputBorder.none,
           hintStyle: TextStyle(color: Colors.white30),
         ),
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-        onChanged: (query) => _debouncer
-          .run(() => context.read<RecipeUseCase>().showRecipesByQuery(query)));
+        style: const TextStyle(color: Colors.white, fontSize: 16.0),
+        onChanged: (query) => _debouncer.run(
+            () => context.read<RecipeUseCase>().showRecipesByQuery(query)));
   }
 
   Widget _buildBackButton() {
