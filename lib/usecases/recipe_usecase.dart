@@ -59,6 +59,15 @@ class RecipeUseCase extends ChangeNotifier {
     return result;
   }
 
+  Future<String> editRecipe(
+      {@required String id, @required Recipe recipe, @required BuildContext context}) async {
+    Navigator.pop(context);
+    _updateState(const RecipeUseCaseLoading());
+    final String result = await recipeRepository.editRecipe(id: id, recipe: recipe);
+    await showAllRecipesOfIndex();
+    return result;
+  }
+
   Future<String> removeRecipe({@required Document document}) async {
     _updateState(const RecipeUseCaseLoading());
     final String result =

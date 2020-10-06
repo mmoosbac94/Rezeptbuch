@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:recipeWebApp/abstract_recipe_repository.dart';
 import 'package:recipeWebApp/models/recipe.dart';
 import 'package:recipeWebApp/webservice.dart';
@@ -26,6 +27,11 @@ class RecipeRepository extends AbstractRecipeRepository {
   @override
   Future<String> removeRecipe({Document document}) {
     return webservice.removeRecipe(document: document);
+  }
+
+  @override
+  Future<String> editRecipe({@required Recipe recipe, @required String id}) {
+    return webservice.editRecipe(id: id, recipe: recipe);
   }
 
   

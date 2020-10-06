@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recipeWebApp/models/recipe.dart';
-import 'package:recipeWebApp/usecases/recipe_usecase.dart';
+import 'package:recipeWebApp/userinterface/edit_recipe_dialog.dart';
 import 'package:recipeWebApp/userinterface/recipe_view.dart';
-import 'package:provider/provider.dart';
 
 class RecipeGridView extends StatelessWidget {
   final Result result;
@@ -92,11 +91,10 @@ class RecipeCard extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(right: 18.0),
                     child: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.edit),
                       onPressed: () => showDialog<dynamic>(
                           context: context,
-                          builder: (context) =>
-                              DeleteDialog(document: document)),
+                          builder: (context) => EditRecipeDialog(document: document)),
                       hoverColor: Colors.transparent,
                     ))
               ],
@@ -105,33 +103,5 @@ class RecipeCard extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class DeleteDialog extends StatelessWidget {
-  final Document document;
-
-  const DeleteDialog({this.document});
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Willst du das Rezept wirklich löschen?'),
-      actions: <Widget>[_yesButton(context), _noButton(context)],
-    );
-  }
-
-  Widget _yesButton(BuildContext context) {
-    return FlatButton(
-        onPressed: () => Navigator.pop(context), child: const Text('Nein'));
-  }
-
-  Widget _noButton(BuildContext context) {
-    return FlatButton(
-        onPressed: () {
-          Navigator.pop(context);
-          context.read<RecipeUseCase>().removeRecipe(document: document);
-        },
-        child: const Text('Ja'));
   }
 }

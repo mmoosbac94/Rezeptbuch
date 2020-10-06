@@ -77,7 +77,7 @@ class RecipeView extends StatelessWidget {
                     text: 'Tipp: ',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: recipe.tip)
-              ], style: TextStyle(color: Colors.black)),
+              ], style: const TextStyle(color: Colors.black)),
             ),
         )
         : Container();
