@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:recipeWebApp/models/recipe.dart';
+import 'package:recipeWebApp/usecases/ingredient_usecase.dart';
 import 'package:recipeWebApp/userinterface/edit_recipe_dialog.dart';
 import 'package:recipeWebApp/userinterface/recipe_view.dart';
+import 'package:provider/provider.dart';
 
 class RecipeGridView extends StatelessWidget {
   final Result result;
@@ -96,7 +98,11 @@ class RecipeCard extends StatelessWidget {
                       onPressed: () => showDialog<dynamic>(
                           context: context,
                           builder: (context) =>
-                              EditRecipeDialog(document: document)),
+                              EditRecipeDialog(document: document)).then(
+                          (dynamic _) => context
+                              .read<IngredientUseCase>()
+                              .ingredientsList
+                              .clear()),
                       hoverColor: Colors.transparent,
                     )),
               ],

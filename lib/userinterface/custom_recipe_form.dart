@@ -123,7 +123,6 @@ class CustomFormState extends State<CustomRecipeForm> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     _buildRecipe();
-                    context.read<IngredientUseCase>().ingredientsList.clear();
                   }
                 },
                 child: (!widget.isEditMode)
