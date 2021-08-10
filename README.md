@@ -22,3 +22,10 @@ samples, guidance on mobile development, and a full API reference.
 ## Run Elastic Search Server, runs on http://localhost:50553
 
 - navigate from C:/ to bin-folder and start elasticsearch in this folder, runs on http://localhost:9200/
+
+
+
+
+<img src="https://user-images.githubusercontent.com/45032075/128872742-d78b816b-c454-4707-90eb-3cf53b4fcf1d.png" />
+
+<img src="https://user-images.githubusercontent.com/45032075/128872832-6f8a807d-f026-476c-9518-7a41ce946b69.png" />
